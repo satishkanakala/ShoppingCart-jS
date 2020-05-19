@@ -4,7 +4,7 @@ const clearCartBtn = document.querySelector(".clear-cart");
 const cartDom = document.querySelector(".cart");
 const cartOverlay = document.querySelector(".cart-overlay");
 const cartItems = document.querySelector(".cart-items");
-const cartTotal = document.querySelector(".cart-total");
+//const cartTotal = document.querySelector(".cart-total");
 const cartContent = document.querySelector(".cart-content");
 const productsDom = document.querySelector(".products-center");
 
@@ -62,11 +62,11 @@ class UI {
                 //save cart in local storage
                 Storage.saveCart(cart);
                 //set cart values
-                this.setCartValues(cart)
+               this.setCartValues(cart)
                 //display cart item
-                this.addCartItem(cartItem);
+              //  this.addCartItem(cartItem);
                 // show the cart
-                this.showCart();
+              //  this.showCart();
             })
         })
     }
@@ -77,7 +77,7 @@ class UI {
             tempTotal += item.price * item.amount;
             itemsTotal += item.amount
         })
-        cartTotal.innerText = parseFloat(tempTotal.toFixed(2));
+      //  cartTotal.innerText = parseFloat(tempTotal.toFixed(2));
         cartItems.innerText = itemsTotal;
     }
     addCartItem(cartItem) {
@@ -102,7 +102,7 @@ class UI {
     }
     setUpApp(){
         cart = Storage.getCart();
-        this.setCartValues(cart);
+      //  this.setCartValues(cart);
         this.populateCart(cart);
         cartBtn.addEventListener('click',this.showCart);
         closeCartBtn.addEventListener('click',this.hideCart);
@@ -171,7 +171,6 @@ class UI {
     }
 }
 
-//Local storage
 class Storage {
     static saveProducts(products) {
         localStorage.setItem("products", JSON.stringify(products))
@@ -188,17 +187,55 @@ class Storage {
     }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.getElementById('ltoh').onclick=function(){
     const ui = new UI();
     const products = new Products();
     ui.setUpApp();
+    //get all products
+    products.getProducts().then(products => {
+        console.log(products);
+        products.sort(function(a,b){
+            return a.price-b.price
+        })
+        console.log(products);
+        ui.displyProducts(products);
+        Storage.saveProducts(products);
+    }).then(() => {
+        ui.getBagButtons();
+        ui.cartLogic();
+    });
+}
+
+document.getElementById('htol').onclick=function(){
+    const ui = new UI();
+    const products = new Products();
+    ui.setUpApp();
+    //get all products
+    products.getProducts().then(products => {
+        console.log(products);
+        products.sort(function(a,b){
+            return b.price-a.price
+        })
+        console.log(products);
+        ui.displyProducts(products);
+        Storage.saveProducts(products);
+    }).then(() => {
+        ui.getBagButtons();
+        ui.cartLogic();
+    });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const ui = new UI();
+    const products = new Products();
+    //ui.setUpApp();
     //get all products
     products.getProducts().then(products => {
         ui.displyProducts(products);
         Storage.saveProducts(products);
     }).then(() => {
         ui.getBagButtons();
-        ui.cartLogic();
+      //  ui.cartLogic();
     });
 
 })
